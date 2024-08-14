@@ -5,6 +5,7 @@
 package br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.dao;
 
 
+import br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.model.*;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -81,19 +82,19 @@ public class PersistenciaJPA implements InterfacePersistencia {
             throw e;
         }
     }
-    /*
-    public List<Modalidade> getModalidades() throws Exception {
+    
+    public List<Pedido> getPedidos() throws Exception {
         //String jpql = "SELECT descricao FROM Modalidade";  // Nome da entidade 'Modalidade'
         //Query<Modalidade> query = entity.createQuery(jpql);
         //return query.getResultList();
 
-        List<Modalidade> modalidades = null;
+        List<Pedido> pedidos = null;
 
-        modalidades = entity.createQuery("select m from Modalidade m", Modalidade.class).getResultList();
+        pedidos = entity.createQuery("select p from Pedido p", Pedido.class).getResultList();
 
-        return modalidades;
+        return pedidos;
     }
-
+    /*
     public List<Modalidade> getModalidades(String texto) throws Exception {
 
         try{
@@ -104,15 +105,18 @@ public class PersistenciaJPA implements InterfacePersistencia {
             e.printStackTrace();
             return null;
         }
+    }*/
+    
+    public List<Alimento> getAlimentos() throws Exception{
+        try{
+            return entity.createQuery("select a from Alimento a", Alimento.class).getResultList();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Erro: " + e.getMessage());
+            return null;
+        }
     }
+    
 
-    public List<Professor> getProfessores() throws Exception {
-
-        List<Professor> professores = null;
-
-        professores = entity.createQuery("select p from Professor p", Professor.class).getResultList();
-
-        return professores;
-    }
-*/
 }

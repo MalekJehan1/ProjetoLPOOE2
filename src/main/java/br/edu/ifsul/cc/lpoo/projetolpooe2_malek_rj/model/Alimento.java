@@ -19,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "alimentos")
-class Alimento {
+public class Alimento {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -74,5 +74,10 @@ class Alimento {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+    
+    @Override
+    public String toString(){
+        return descricao;
     }
 }

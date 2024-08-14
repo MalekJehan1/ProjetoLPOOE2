@@ -8,10 +8,25 @@ package br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.model;
  *
  * @author malek
  */
-enum StatusPedido {
-    NOVO,
-    EM_PREPARACAO,
-    EM_ROTA,
-    FINALIZADO,
-    ENTREGUE
+public enum StatusPedido {
+    NOVO("Novo"),
+    EM_PREPARACAO("Em preparação"),
+    EM_ROTA("Em rota"),
+    FINALIZADO("Finalizado"),
+    ENTREGUE("Entregue");
+
+    private final String descricao;
+
+    StatusPedido(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    @Override
+    public String toString() {
+        return descricao;
+    }
 }

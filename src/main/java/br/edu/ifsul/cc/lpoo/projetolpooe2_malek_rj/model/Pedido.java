@@ -4,7 +4,9 @@
  */
 package br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -15,14 +17,14 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "pedidos")
-class Pedido {
+public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "data", nullable = false)
-    private Date data;
+    private Calendar data;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -41,7 +43,7 @@ class Pedido {
 
     public Pedido() {}
 
-    public Pedido(Date data) {
+    public Pedido(Calendar data) {
         this.data = data;
         this.status = StatusPedido.NOVO;
         this.valorTotal = 0.0;
@@ -71,11 +73,11 @@ class Pedido {
         this.id = id;
     }
 
-    public Date getData() {
+    public Calendar getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(Calendar data) {
         this.data = data;
     }
 
@@ -101,6 +103,16 @@ class Pedido {
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
+    }
+    
+    @Override
+    public String toString(){
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String dataFormatada = sdf.format(data.getTime());
+        return "Pedido N " + id +
+                " Data: " + dataFormatada +
+                " Status: " + status;
     }
 }
 
