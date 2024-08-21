@@ -8,16 +8,17 @@ import br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.dao.PersistenciaJPA;
 import br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.model.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author malek
  */
 public class TelaPedidos extends javax.swing.JFrame {
-    
+
     DefaultListModel mascaraItemLista = new DefaultListModel<>();
     PersistenciaJPA jpa = new PersistenciaJPA();
-    
+
     /**
      * Creates new form TelaPedidos
      */
@@ -43,11 +44,14 @@ public class TelaPedidos extends javax.swing.JFrame {
         btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 153, 0));
 
+        jLabel1.setForeground(new java.awt.Color(0, 51, 255));
         jLabel1.setText("Pedidos");
 
         jScrollPane1.setViewportView(jListPedidos);
 
+        btnNovo.setForeground(new java.awt.Color(0, 51, 255));
         btnNovo.setText("Novo");
         btnNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -55,9 +59,21 @@ public class TelaPedidos extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setForeground(new java.awt.Color(0, 51, 255));
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
+        btnRemover.setForeground(new java.awt.Color(0, 51, 255));
         btnRemover.setText("Remover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,9 +81,6 @@ public class TelaPedidos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(btnNovo)
@@ -77,15 +90,18 @@ public class TelaPedidos extends javax.swing.JFrame {
                         .addComponent(btnRemover))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(jLabel1)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -106,8 +122,44 @@ public class TelaPedidos extends javax.swing.JFrame {
         telaCadastro.setLocationRelativeTo(this);
         telaCadastro.setVisible(true);
         atualizaLista();
-                
+
+
     }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        TelaCadastroPedido telaCadastro = new TelaCadastroPedido(this, true);
+        telaCadastro.listarStatus();
+        //telaCadastro.listarAlimentos();
+        if (jListPedidos.getSelectedValue() != null) {
+            telaCadastro.setPedido(jListPedidos.getSelectedValue());
+        }
+        telaCadastro.listarInformacoes();
+        telaCadastro.setLocationRelativeTo(this);
+        telaCadastro.setVisible(true);
+        atualizaLista();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        // TODO add your handling code here:
+        Pedido p = jListPedidos.getSelectedValue();
+        if (p != null) {
+            try {
+                jpa = new PersistenciaJPA();
+                jpa.conexaoAberta();
+                p = (Pedido) jpa.find(Pedido.class, p.getId());
+                jpa.remover(p);
+                jpa.fecharConexao();
+                JOptionPane.showMessageDialog(rootPane, "Pedido (" + p.getId() + ") removido!");
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione um pedido para remover!!");
+        }
+        atualizaLista();
+
+    }//GEN-LAST:event_btnRemoverActionPerformed
     private void atualizaLista() {
         mascaraItemLista.removeAllElements();
 
@@ -128,6 +180,7 @@ public class TelaPedidos extends javax.swing.JFrame {
             System.out.println("Erro:: " + e.getMessage());
         }
     }
+
     /**
      * @param args the command line arguments
      */

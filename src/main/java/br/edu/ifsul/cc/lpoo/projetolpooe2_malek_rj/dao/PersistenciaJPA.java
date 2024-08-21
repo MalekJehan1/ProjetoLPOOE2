@@ -94,11 +94,12 @@ public class PersistenciaJPA implements InterfacePersistencia {
 
         return pedidos;
     }
+    
     /*
-    public List<Modalidade> getModalidades(String texto) throws Exception {
+    public List<Alimento> getAlimentosById(String texto) throws Exception {
 
         try{
-            TypedQuery<Modalidade> query = entity.createQuery("SELECT m FROM Modalidade m WHERE LOWER(m.descricao) LIKE :descricao", Modalidade.class);
+            TypedQuery<Modalidade> query = entity.createQuery("SELECT p FROM pro m WHERE LOWER(m.descricao) LIKE :descricao", Modalidade.class);
             query.setParameter("descricao", "%" + texto.toLowerCase() + "%");
             return query.getResultList();
         } catch(Exception e){

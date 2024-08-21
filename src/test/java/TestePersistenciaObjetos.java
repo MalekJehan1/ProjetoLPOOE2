@@ -1,8 +1,10 @@
 
 import br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.dao.PersistenciaJPA;
 import br.edu.ifsul.cc.lpoo.projetolpooe2_malek_rj.model.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +41,7 @@ public class TestePersistenciaObjetos {
 
     }
     
-    @Test
+    //@Test
     public void Test3() throws Exception {
           Categoria c = new Categoria("Salgado");
           Categoria c1 = new Categoria("Doce");
@@ -51,9 +53,13 @@ public class TestePersistenciaObjetos {
           
          Pedido p = new Pedido(Calendar.getInstance());
          Pedido p2 = new Pedido(Calendar.getInstance());
+         List<Alimento> lst = new ArrayList<>();
+         lst.add(a);
+         lst.add(a1);
+         p2.setAlimentos(lst);
         try {
             jpa.persist(p);
-            jpa.persist(p2);
+            
             
             jpa.persist(c);
             jpa.persist(c1);
@@ -62,10 +68,23 @@ public class TestePersistenciaObjetos {
             jpa.persist(a);
             jpa.persist(a1);
             jpa.persist(a2);
+            jpa.persist(p2);
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
         }
 
     }
+    @Test
+    public void Test4() throws Exception {
+        
+        Pedido p = (Pedido) jpa.find(Pedido.class, 8);
+        
+        List<Alimento> lst = new ArrayList();
+        
+        p.setAlimentos(lst);
+        
+        jpa.persist(p);
+    }
+    
 }

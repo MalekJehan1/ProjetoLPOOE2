@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,7 +27,7 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
     PersistenciaJPA jpa;
     private Pedido pedido;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    DefaultListModel mascaraItemLista = new DefaultListModel<>();
+    DefaultListModel<Alimento> mascaraItemLista = new DefaultListModel<>();
 
     public Pedido getPedido() {
         return pedido;
@@ -41,6 +44,25 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
+    }
+
+    public void listarInformacoes() {
+
+        List<Alimento> list = new ArrayList();
+
+        try {
+            jpa = new PersistenciaJPA();
+            Pedido p = (Pedido) jpa.find(Pedido.class, pedido.getId());
+            list = p.getAlimentos();
+            for (Alimento a : list) {
+                mascaraItemLista.addElement(a);
+            }
+            jListAlimentos.setModel(mascaraItemLista);
+            txtData.setText(sdf.format(p.getData().getTime()));
+            jCBoxStatus.setSelectedItem(p.getStatus());
+        } catch (Exception ex) {
+            Logger.getLogger(TelaCadastroPedido.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void listarStatus() {
@@ -78,17 +100,22 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListAlimentos = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
 
-        jLabel1.setText("Novo Pedido");
+        jLabel1.setForeground(new java.awt.Color(0, 51, 255));
+        jLabel1.setText("Pedido");
 
+        jLabel2.setForeground(new java.awt.Color(0, 51, 255));
         jLabel2.setText("Data");
 
+        jLabel3.setForeground(new java.awt.Color(0, 51, 255));
         jLabel3.setText("Status");
 
+        jLabel4.setForeground(new java.awt.Color(0, 51, 255));
         jLabel4.setText("Produtos");
 
+        btnSalvar.setForeground(new java.awt.Color(0, 51, 255));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,6 +123,7 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
             }
         });
 
+        btnCancelar.setForeground(new java.awt.Color(0, 51, 255));
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,12 +133,19 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
 
         jScrollPane1.setViewportView(jListAlimentos);
 
-        jButton1.setText("-");
-
-        jButton2.setText("+");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnRemove.setForeground(new java.awt.Color(0, 51, 255));
+        btnRemove.setText("-");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
+        btnAdd.setForeground(new java.awt.Color(0, 51, 255));
+        btnAdd.setText("+");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
             }
         });
 
@@ -127,9 +162,6 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -143,15 +175,18 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(174, 174, 174)
-                        .addComponent(jLabel4)))
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(184, 184, 184)
+                        .addComponent(jLabel1)))
                 .addContainerGap(19, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(339, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(20, 20, 20)))
         );
         layout.setVerticalGroup(
@@ -176,7 +211,7 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(btnRemove)
                         .addGap(49, 49, 49)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
@@ -185,7 +220,7 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(166, Short.MAX_VALUE)
-                    .addComponent(jButton2)
+                    .addComponent(btnAdd)
                     .addGap(128, 128, 128)))
         );
 
@@ -196,16 +231,26 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
         // TODO add your handling code here:
 
         if (pedido == null) {
+            Date date;
             try {
                 pedido = new Pedido();
-                Date date = sdf.parse(txtData.getText());
 
-                // Instancia o Calendar e define o tempo
+                if (txtData.getText() != null && !txtData.getText().trim().isEmpty()) {
+                    date = sdf.parse(txtData.getText());
+
+                } else {
+                    date = new Date();
+                }
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
-
                 pedido.setData(calendar);
+
                 pedido.setStatus((StatusPedido) jCBoxStatus.getSelectedItem());
+
+                for (int i = 0; i < mascaraItemLista.size(); i++) {
+                    Alimento alimento = (Alimento) mascaraItemLista.getElementAt(i);
+                    pedido.addAlimento(alimento, 1);
+                }
 
                 jpa = new PersistenciaJPA();
                 jpa.conexaoAberta();
@@ -213,7 +258,8 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
                 jpa.fecharConexao();
                 dispose();
             } catch (Exception ex) {
-                System.out.println("Erro ao inserir nova modalidade");
+                JOptionPane.showMessageDialog(rootPane, "Erro ao inserir um novo pedido!");
+                System.out.println("ErRO: " + ex.getMessage());
             }
         } else {
 
@@ -223,26 +269,31 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
                 Pedido p = new Pedido();
                 p = pedido;
                 p = (Pedido) jpa.find(Pedido.class, p.getId());
-                Date date = sdf.parse(txtData.getText());
 
-                // Instancia o Calendar e define o tempo
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-
-                p.setData(calendar);
                 p.setStatus((StatusPedido) jCBoxStatus.getSelectedItem());
+
+                List<Alimento> lst = new ArrayList();
+
+                for (int i = 0; i < mascaraItemLista.getSize(); i++) {
+                    lst.add(mascaraItemLista.getElementAt(i));
+                }
+
+                p.setAlimentos(lst);
+
                 jpa.conexaoAberta();
                 jpa.persist(p);
                 jpa.fecharConexao();
                 dispose();
             } catch (Exception e) {
-                System.out.println("Erro" + e.getMessage());
+                JOptionPane.showMessageDialog(rootPane, "Erro ao editar o pedido!");
+                System.out.println("erro: " + e.getMessage());
+
             }
 
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         TelaAdicionarAlimento telaAlimento = new TelaAdicionarAlimento(this, true);
         //telaAlimento.listarStatus();
@@ -253,16 +304,23 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
         Alimento a = telaAlimento.getAlimentoSelecionado();
 
         mascaraItemLista.addElement(a);
-
         jListAlimentos.setModel(mascaraItemLista);
 
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        int alimSelecionado = jListAlimentos.getSelectedIndex();
+        if (alimSelecionado != -1) {
+            mascaraItemLista.removeElementAt(alimSelecionado);
+        }
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -307,10 +365,10 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<StatusPedido> jCBoxStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

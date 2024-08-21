@@ -108,7 +108,7 @@ public class Pedido {
     @Override
     public String toString(){
         
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm");
         String dataFormatada = sdf.format(data.getTime());
         return "Pedido N " + id +
                 " Data: " + dataFormatada +
