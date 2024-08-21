@@ -251,6 +251,8 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
                     Alimento alimento = (Alimento) mascaraItemLista.getElementAt(i);
                     pedido.addAlimento(alimento, 1);
                 }
+                
+                pedido.somaTotal();
 
                 jpa = new PersistenciaJPA();
                 jpa.conexaoAberta();
@@ -279,7 +281,7 @@ public class TelaCadastroPedido extends javax.swing.JDialog {
                 }
 
                 p.setAlimentos(lst);
-
+                p.somaTotal();
                 jpa.conexaoAberta();
                 jpa.persist(p);
                 jpa.fecharConexao();

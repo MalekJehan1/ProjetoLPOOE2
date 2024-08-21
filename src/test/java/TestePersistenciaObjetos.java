@@ -41,7 +41,7 @@ public class TestePersistenciaObjetos {
 
     }
     
-    //@Test
+    @Test
     public void Test3() throws Exception {
           Categoria c = new Categoria("Salgado");
           Categoria c1 = new Categoria("Doce");
@@ -75,7 +75,8 @@ public class TestePersistenciaObjetos {
         }
 
     }
-    @Test
+    
+    //@Test
     public void Test4() throws Exception {
         
         Pedido p = (Pedido) jpa.find(Pedido.class, 8);

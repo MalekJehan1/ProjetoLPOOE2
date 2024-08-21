@@ -57,7 +57,10 @@ public class Pedido {
     }
 
     public void somaTotal() {
-        valorTotal = alimentos.stream().mapToDouble(Alimento::getValor).sum();
+        valorTotal = 0;
+        for(Alimento a : alimentos){
+            valorTotal += a.getValor();
+        }
     }
 
     public void alteraStatus(String novoStatus) {
@@ -112,7 +115,8 @@ public class Pedido {
         String dataFormatada = sdf.format(data.getTime());
         return "Pedido N " + id +
                 " Data: " + dataFormatada +
-                " Status: " + status;
+                " Status: " + status +
+                " Valor: " + getValorTotal();
     }
 }
 
